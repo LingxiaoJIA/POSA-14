@@ -234,13 +234,13 @@ public class SynchronizedQueue {
             Thread.sleep(100);
 
             // TODO - you fill in here to interrupt the threads.
-            producer.interrupt();
             consumer.interrupt();
+            producer.interrupt();
 
             // TODO - you fill in here to wait for the threads to
             // exit.
-            producer.join();
             consumer.join();
+            producer.join();
             
             // Do some sanity checking to see if the Threads work as
             // expected.
