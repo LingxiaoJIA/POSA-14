@@ -1,8 +1,7 @@
-// Import the necessary Java synchronization and scheduling classes.
-
 package edu.vuum.mocca;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.Lock;
 
 /**
  * @class SimpleAtomicLong
@@ -17,27 +16,34 @@ class SimpleAtomicLong
      * The value that's manipulated atomically via the methods.
      */
     private long mValue;
-
-
+    
     /**
      * The ReentrantReadWriteLock used to serialize access to mValue.
+     * Try/finally can be used but is NOT required....
      */
 
     // TODO -- you fill in here by replacing the null with an
     // initialization of ReentrantReadWriteLock.
     private ReentrantReadWriteLock mRWLock = new ReentrantReadWriteLock();
-
+    
+    private final Lock r = mRWLock.readLock();
+	private final Lock w = mRWLock.writeLock();
+	
     /**
      * Creates a new SimpleAtomicLong with the given initial value.
      */
     public SimpleAtomicLong(long initialValue)
     {
         // TODO -- you fill in here
+    	//mValue with initialValue
     	mValue = initialValue;
+    
+    	
+    	
     }
 
     /**
-     * @brief Gets the current value
+     * @brief Gets the current value.
      * 
      * @returns The current value
      */
@@ -46,11 +52,23 @@ class SimpleAtomicLong
         long value;
 
         // TODO -- you fill in here
-    	mRWLock.readLock().lock();
-    	value = mValue;
-    	mRWLock.readLock().unlock();
-
-        return value;
+        // Read lock for this method. Write locks for all other methods after this.
+       
+        
+        r.lock();
+        
+        try{
+        	
+        	value = mValue;
+        	return value;
+        	
+        }finally{
+        	
+        	r.unlock();
+        	
+        }
+        
+        
     }
 
     /**
@@ -63,11 +81,19 @@ class SimpleAtomicLong
         long value = 0;
 
         // TODO -- you fill in here
-    	mRWLock.writeLock().lock();
-    	value = --mValue;
-    	mRWLock.writeLock().unlock();
-
-        return value;
+        w.lock();
+        
+        try{
+        	
+        	--mValue;
+        	value = mValue;
+            return value;
+        	
+        }finally{
+        	
+        	w.unlock();
+        }
+       
     }
 
     /**
@@ -80,11 +106,22 @@ class SimpleAtomicLong
         long value = 0;
 
         // TODO -- you fill in here
-    	mRWLock.writeLock().lock();
-    	value = mValue++;
-    	mRWLock.writeLock().unlock();
 
-        return value;
+        w.lock();
+        
+        try{
+        	
+        	value = mValue;
+        	
+        	++mValue;
+        	return value;
+        	
+        }finally{
+        	
+        	w.unlock();
+        	
+        }
+       
     }
 
     /**
@@ -97,12 +134,24 @@ class SimpleAtomicLong
         long value = 0;
 
         // TODO -- you fill in here
-    	mRWLock.writeLock().lock();
-    	value = mValue--;
-    	mRWLock.writeLock().unlock();
 
-        return value;
+        w.lock();
+        
+        try{
+        	
+        	value = mValue;
+        	
+        	--mValue;
+        	return value;
+        	
+        }finally{
+        	
+        	w.unlock();
+        	
+        }
+       
     }
+    
 
     /**
      * @brief Atomically increments by one the current value
@@ -114,11 +163,22 @@ class SimpleAtomicLong
         long value = 0;
 
         // TODO -- you fill in here
-    	mRWLock.writeLock().lock();
-    	value = ++mValue;
-    	mRWLock.writeLock().unlock();
 
-        return value;
+        w.lock();
+        
+        try{
+        	
+        	++mValue;
+        	value = mValue;
+        	
+        	return value;
+        	
+        }finally{
+        	
+        	w.unlock();
+        	
+        }
+       
     }
 }
 
