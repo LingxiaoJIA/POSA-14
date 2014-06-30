@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="edu/vuum/mocca/SimpleAtomicLong_2.java|edu/vuum/mocca/SimpleAtomicLong_3.java|edu/vuum/mocca/SimpleAtomicLong_4.java|edu/vuum/mocca/SimpleAtomicLong_5.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="edu/vuum/mocca/SimpleAtomicLong_1.java|edu/vuum/mocca/SimpleAtomicLong_2.java|edu/vuum/mocca/SimpleAtomicLong_3.java|edu/vuum/mocca/SimpleAtomicLong_4.java|edu/vuum/mocca/SimpleAtomicLong_5.java|edu/vuum/mocca/SimpleSemaphore_1.java|edu/vuum/mocca/SimpleSemaphore_2.java|edu/vuum/mocca/SimpleSemaphore_3.java|edu/vuum/mocca/SimpleSemaphore_4.java|edu/vuum/mocca/SimpleSemaphore_5.java" kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>

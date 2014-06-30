@@ -1,44 +1,43 @@
 package edu.vuum.mocca;
-
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @class SimpleSemaphore
  * 
- * @brief This class provides a simple counting semaphore
- *        implementation using Java a ReentrantLock and a
- *        ConditionObject (which is accessed via a Condition). It must
- *        implement both "Fair" and "NonFair" semaphore semantics,
- *        just liked Java Semaphores.
+ * @brief This class provides a simple counting semaphore implementation using
+ *        Java a ReentrantLock and a ConditionObject (which is accessed via a
+ *        Condition). It must implement both "Fair" and "NonFair" semaphore
+ *        semantics, just liked Java Semaphores.
  */
 public class SimpleSemaphore {
     /**
      * Define a ReentrantLock to protect the critical section.
      */
     // TODO - you fill in here
-    private final ReentrantLock mLock;
-    
-    /**
+	private final Lock lock;
+
+	/**
      * Define a Condition that waits while the number of permits is 0.
      */
     // TODO - you fill in here
-    private final Condition empty;
+	private final Condition notZero;
 
     /**
      * Define a count of the number of available permits.
      */
     // TODO - you fill in here.  Make sure that this data member will
     // ensure its values aren't cached by multiple Threads..
-    private int count;
-    
+	private volatile int count;
+
     public SimpleSemaphore(int permits, boolean fair) {
         // TODO - you fill in here to initialize the SimpleSemaphore,
         // making sure to allow both fair and non-fair Semaphore
         // semantics.
     	count = permits;
-    	mLock = new ReentrantLock(fair);
-    	empty = mLock.newCondition();
+    	lock = new ReentrantLock(fair);
+    	notZero = lock.newCondition();
     }
 
     /**
@@ -47,14 +46,14 @@ public class SimpleSemaphore {
      */
     public void acquire() throws InterruptedException {
         // TODO - you fill in here.
-    	mLock.lockInterruptibly();
+    	lock.lock();
     	try {
-    		while (count == 0) {
-    			empty.await();
+    		while (count <= 0) {
+    			notZero.await();
     		}
     		count--;
     	} finally {
-    		mLock.unlock();
+    		lock.unlock();
     	}
     }
 
@@ -64,11 +63,15 @@ public class SimpleSemaphore {
      */
     public void acquireUninterruptibly() {
         // TODO - you fill in here.
-    	mLock.lock();
-    	while (count == 0) 
-    		empty.awaitUninterruptibly();
-    	count--;
-    	mLock.unlock();
+    	lock.lock();
+    	try {
+    		while (count <= 0) {
+    			notZero.awaitUninterruptibly();
+    		}
+    		count--;
+		} finally {
+    		lock.unlock();
+    	}
     }
 
     /**
@@ -76,10 +79,13 @@ public class SimpleSemaphore {
      */
     void release() {
         // TODO - you fill in here.
-    	mLock.lock();
-    	empty.signal();
-    	count++;
-    	mLock.unlock();
+    	lock.lock();
+    	try {
+    		count++;
+    		notZero.signal();
+    	} finally {
+    		lock.unlock();
+    	}
     }
 
     /**
@@ -88,6 +94,13 @@ public class SimpleSemaphore {
     public int availablePermits() {
         // TODO - you fill in here by changing null to the appropriate
         // return value.
-        return count;
+    	int permits;
+    	lock.lock();
+    	try {
+    		permits = count;
+    	} finally {
+    		lock.unlock();
+    	}
+        return permits;
     }
 }

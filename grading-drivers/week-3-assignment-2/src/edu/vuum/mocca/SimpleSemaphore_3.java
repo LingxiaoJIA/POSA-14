@@ -1,6 +1,7 @@
 package edu.vuum.mocca;
 
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.Condition;
 
 /**
@@ -17,28 +18,28 @@ public class SimpleSemaphore {
      * Define a ReentrantLock to protect the critical section.
      */
     // TODO - you fill in here
-    private final ReentrantLock mLock;
-    
+	final ReentrantLock lock;
+
     /**
      * Define a Condition that waits while the number of permits is 0.
      */
     // TODO - you fill in here
-    private final Condition empty;
-
+	Condition conditionIsZero;
+	
     /**
      * Define a count of the number of available permits.
      */
     // TODO - you fill in here.  Make sure that this data member will
     // ensure its values aren't cached by multiple Threads..
-    private int count;
-    
+	volatile int mPermits;
+
     public SimpleSemaphore(int permits, boolean fair) {
         // TODO - you fill in here to initialize the SimpleSemaphore,
         // making sure to allow both fair and non-fair Semaphore
         // semantics.
-    	count = permits;
-    	mLock = new ReentrantLock(fair);
-    	empty = mLock.newCondition();
+    	mPermits = permits;
+    	lock = new ReentrantLock(fair);
+    	conditionIsZero =  lock.newCondition();
     }
 
     /**
@@ -47,14 +48,14 @@ public class SimpleSemaphore {
      */
     public void acquire() throws InterruptedException {
         // TODO - you fill in here.
-    	mLock.lockInterruptibly();
+    	lock.lockInterruptibly();
     	try {
-    		while (count == 0) {
-    			empty.await();
+    		while (mPermits==0){
+    			conditionIsZero.await();
     		}
-    		count--;
+    		--mPermits;
     	} finally {
-    		mLock.unlock();
+    		lock.unlock();
     	}
     }
 
@@ -64,11 +65,15 @@ public class SimpleSemaphore {
      */
     public void acquireUninterruptibly() {
         // TODO - you fill in here.
-    	mLock.lock();
-    	while (count == 0) 
-    		empty.awaitUninterruptibly();
-    	count--;
-    	mLock.unlock();
+    	lock.lock();
+    	try {
+    		while (mPermits==0){
+					conditionIsZero.awaitUninterruptibly();
+    		}
+    		--mPermits;
+    	} finally {
+    		lock.unlock();
+    	}
     }
 
     /**
@@ -76,10 +81,13 @@ public class SimpleSemaphore {
      */
     void release() {
         // TODO - you fill in here.
-    	mLock.lock();
-    	empty.signal();
-    	count++;
-    	mLock.unlock();
+    	lock.lock();
+    	try {
+    		++mPermits;
+    		conditionIsZero.signalAll();
+    	} finally {
+    		lock.unlock();
+    	}
     }
 
     /**
@@ -88,6 +96,6 @@ public class SimpleSemaphore {
     public int availablePermits() {
         // TODO - you fill in here by changing null to the appropriate
         // return value.
-        return count;
+        return mPermits;
     }
 }
