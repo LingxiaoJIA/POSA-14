@@ -3,7 +3,7 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="edu/vuum/mocca/AndroidPlatformStrategy_1.java|edu/vuum/mocca/AndroidPlatformStrategy_me.java|edu/vuum/mocca/AndroidPlatformStrategy_2.java|edu/vuum/mocca/AndroidPlatformStrategy_3.java|edu/vuum/mocca/AndroidPlatformStrategy_4.java|edu/vuum/mocca/AndroidPlatformStrategy_5.java" kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

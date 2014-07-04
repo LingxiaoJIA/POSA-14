@@ -91,7 +91,7 @@ public class DownloadBase extends Activity {
      * exists.
      */
     @Override
-        public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         Log.d(getClass().getSimpleName(), "onCreate");
         super.onCreate(savedInstanceState);
         
