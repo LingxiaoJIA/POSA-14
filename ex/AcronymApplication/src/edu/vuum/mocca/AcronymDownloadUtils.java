@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 
@@ -19,9 +20,9 @@ import android.util.Log;
  * A class to handle the Actual Downloading of information from the
  * Internet.
  */
-public class DownloadUtils {
+public class AcronymDownloadUtils {
     // Logging Tag
-    private final static String LOG_TAG = DownloadUtils.class
+    private final static String LOG_TAG = AcronymDownloadUtils.class
         .getCanonicalName();
 
     /** 
@@ -54,7 +55,10 @@ public class DownloadUtils {
             // For each option, create an AcronymData and add it to
             // rValue.
             for (int i = 0; i < options.length(); i++) {
-                rValue.add(new AcronymData(options.getJSONObject(i)));
+                JSONObject jsonObject = options.getJSONObject(i);
+                rValue.add(new AcronymData(jsonObject.getString("lf"),
+                                           jsonObject.getInt("freq"),
+                                           jsonObject.getInt("since")));
             }
 
             // Log for debugging purposes.
