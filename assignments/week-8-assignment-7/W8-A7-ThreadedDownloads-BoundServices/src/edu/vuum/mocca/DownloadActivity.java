@@ -75,8 +75,7 @@ public class DownloadActivity extends DownloadBase {
                 // to a generated stub method that converts the
                 // service parameter into an interface that can be
                 // used to make RPC calls to the Service.
-
-                mDownloadCall = null;
+            	mDownloadCall = DownloadCall.Stub.asInterface(service);
             }
 
             /**
@@ -108,8 +107,7 @@ public class DownloadActivity extends DownloadBase {
                 // to a generated stub method that converts the
                 // service parameter into an interface that can be
                 // used to make RPC calls to the Service.
-
-                mDownloadRequest = null;
+                mDownloadRequest = DownloadRequest.Stub.asInterface(service);
             }
 
             /**
@@ -145,7 +143,12 @@ public class DownloadActivity extends DownloadBase {
                 // sendPath().  Please use displayBitmap() defined in
                 // DownloadBase.
 
-                Runnable displayRunnable = null;
+                Runnable displayRunnable = new Runnable() {
+                	public void run() {
+                		displayBitmap(imagePathname);
+                	}
+                };
+                runOnUiThread(displayRunnable);
             }
         };
      
@@ -162,12 +165,31 @@ public class DownloadActivity extends DownloadBase {
         case R.id.bound_sync_button:
             // TODO - You fill in here to use mDownloadCall to
             // download the image & then display it.
+        	if (mDownloadCall != null) {
+                try {
+                    String results =
+                        // Invoke the twoway call, which blocks until
+                        // it gets a reply.
+                    	mDownloadCall.downloadImage(uri);
+                    displayBitmap(results);
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
+                }
+        	}
             break;
 
         case R.id.bound_async_button:
             // TODO - You fill in here to call downloadImage() on
             // mDownloadRequest, passing in the appropriate Uri and
             // callback.
+            if (mDownloadRequest != null) {
+                try {
+                    // Invoke the oneway call, which doesn't block.
+                    mDownloadRequest.downloadImage(uri, mDownloadCallback);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
             break;
         }
     }

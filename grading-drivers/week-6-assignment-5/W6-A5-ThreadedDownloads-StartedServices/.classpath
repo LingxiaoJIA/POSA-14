@@ -4,7 +4,7 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="lib" path="libs/robotium-solo-5.1.jar"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="edu/vuum/mocca/DownloadActivity_.java|edu/vuum/mocca/DownloadIntentService_.java|edu/vuum/mocca/ThreadPoolDownloadService_.java|edu/vuum/mocca/DownloadActivity_1.java|edu/vuum/mocca/DownloadIntentService_1.java|edu/vuum/mocca/ThreadPoolDownloadService_1.java|edu/vuum/mocca/DownloadActivity_2.java|edu/vuum/mocca/DownloadIntentService_2.java|edu/vuum/mocca/ThreadPoolDownloadService_2.java|edu/vuum/mocca/DownloadActivity_3.java|edu/vuum/mocca/DownloadIntentService_3.java|edu/vuum/mocca/ThreadPoolDownloadService_3.java|edu/vuum/mocca/DownloadActivity_4.java|edu/vuum/mocca/DownloadIntentService_4.java|edu/vuum/mocca/ThreadPoolDownloadService_4.java" kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
